@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SetGameModel<Content> where Content: Equatable {
+struct SetGameModel {
     
     private(set) var deck: Array<Card>
     private(set) var cardsOnTheTable: Array<Card>
@@ -21,7 +21,7 @@ struct SetGameModel<Content> where Content: Equatable {
     
     private(set) var lastFaceUpCardIndex: Int
     
-    init(deck: [Content], cardContantFactory: (Int) -> Content) {
+    init(deck: [CardContent], cardContantFactory: (Int) -> CardContent) {
         self.deck = Array<Card>()
         cardsOnTheTable = Array<Card>()
         selectedCards = Array<Card>()
@@ -98,7 +98,7 @@ struct SetGameModel<Content> where Content: Equatable {
         var isFaceUp: Bool = false
         var isSelected: Bool = false
         var isMatched: Bool = false
-        var content: Content
+        var content: CardContent
         var id: Int
     }
     
