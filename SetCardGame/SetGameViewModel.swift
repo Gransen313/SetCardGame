@@ -28,6 +28,9 @@ class SetGameViewModel: ObservableObject {
     func addCards() {
         model.faceUp(numberOfCardsToAdd)
     }
+    func choose(card: SetGameModel<CardContent>.Card) {
+        model.choose(card: card)
+    }
     
     //MARK: - Constants
     private let numberOfCardsToAdd = 3

@@ -26,7 +26,13 @@ struct SetGameView: View {
             }
             ZStack {
                 Grid(viewModel.cards) { card in
-                    CardView(card: card).padding()
+                    CardView(card: card)
+                        .padding()
+                        .onTapGesture {
+                            withAnimation(.linear) {
+                                viewModel.choose(card: card)
+                            }
+                        }
                 }
             }
             ZStack {
@@ -36,9 +42,12 @@ struct SetGameView: View {
         }
         .padding(20)
     }
+    
 }
 
+//MARK: - Card view
 struct CardView: View {
+    
     var card: SetGameModel<CardContent>.Card
     
     var cardElementsIdentifiable: [CardContentIdentifiable] {
@@ -60,6 +69,7 @@ struct CardView: View {
     private func body(for size: CGSize) -> some View {
         if card.isFaceUp && !card.isMatched {
             ZStack {
+                RoundedRectangle(cornerRadius: cornerRadius).fill(card.isSelected ? Color.gray : Color.white).opacity(opacityForSelection)
                 RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: lineWidth)
                 VStack {
                     ForEach(cardElementsIdentifiable) { element in
@@ -78,38 +88,16 @@ struct CardView: View {
     private let cornerRadius: CGFloat = 10.0
     private let lineWidth: CGFloat = 2.0
     private let fontScaleFactor: CGFloat = 0.3
+    private let opacityForSelection: Double = 0.3
     private func fontSize(for size: CGSize) -> CGFloat {
         min(size.width, size.height) * fontScaleFactor
     }
     
 }
 
-struct CardElementView: View {
-    var cardElementIdentifiable: CardContentIdentifiable
-    
-    var body: some View {
-        GeometryReader { geometry in
-            HStack(alignment: .center, spacing: 0) {
-                Spacer()
-                VStack(alignment: .center, spacing: 0) {
-                    Spacer()
-                    body(for: geometry.size)
-                    Spacer()
-                }
-                Spacer()
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private func body(for size: CGSize) -> some View {
-        Text(cardElementIdentifiable.shape.letter)
-    }
-}
-
+//MARK: - Struct for drawing one element of card content
 struct CardContentIdentifiable: Identifiable {
-    var numberOFShapes: Int
-//    var numberOFShapes: NumberOfShapes
+    
     var shape: Shape
     var shading: Double
     var color: Color
@@ -117,13 +105,13 @@ struct CardContentIdentifiable: Identifiable {
     var id: Int
     
     init(cardContent: CardContent, id: Int) {
-        numberOFShapes = cardContent.numberOFShapes
         shape = cardContent.shape
         shading = cardContent.shading
         color = cardContent.color
         
         self.id = id
     }
+    
 }
 
 

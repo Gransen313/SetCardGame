@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Deck {
     
-    // an abstract deck of playing cards, not in game now
+    // An abstract deck of playing cards, not in game in current moment
     var deck = Array<CardContent>()
     
     static let numberOfShapes: [Int] = [1, 2, 3]
@@ -37,17 +37,33 @@ struct Deck {
         return deck
     }
     
+    func cardsIsMatched() {
+        
+    }
+    
+    func matched<P: Equatable>(first: P, second: P, third: P) -> Bool {
+        if ((first == second) && (second == third)) || ((first != second) && (first != third) && (second != third)) {
+            print("matched")
+            return true
+        } else {
+            print("not matched")
+            return false
+        }
+    }
+    
 }
 
 struct CardContent: Equatable {
+    
     var numberOFShapes: Int
 //    var numberOFShapes: NumberOfShapes
     var shape: Shape
     var shading: Double
     var color: Color
+    
 }
 
-enum Shape {
+enum Shape: Equatable {
     case diamond, rectangle, oval
     var letter: String {
         switch self {
