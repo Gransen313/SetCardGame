@@ -9,15 +9,15 @@ import Foundation
 
 class SetGameViewModel: ObservableObject {
     
-    @Published private var model: SetGameModel<CardContent> = SetGameViewModel.createSetGameModel()
+    @Published private var model: SetGameModel = SetGameViewModel.createSetGameModel()
     
-    private static func createSetGameModel() -> SetGameModel<CardContent> {
+    private static func createSetGameModel() -> SetGameModel {
         let deck = Deck().deck
-        return SetGameModel<CardContent>(deck: deck) { index in deck[index] }
+        return SetGameModel(deck: deck) { index in deck[index] }
     }
     
     //MARK: - Access to model
-    var cards: Array<SetGameModel<CardContent>.Card> {
+    var cards: Array<SetGameModel.Card> {
         model.cardsOnTheTable
     }
     
@@ -28,7 +28,7 @@ class SetGameViewModel: ObservableObject {
     func addCards() {
         model.faceUp(numberOfCardsToAdd)
     }
-    func choose(card: SetGameModel<CardContent>.Card) {
+    func choose(card: SetGameModel.Card) {
         model.choose(card: card)
     }
     

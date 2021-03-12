@@ -48,7 +48,7 @@ struct SetGameView: View {
 //MARK: - Card view
 struct CardView: View {
     
-    var card: SetGameModel<CardContent>.Card
+    var card: SetGameModel.Card
     
     var cardElementsIdentifiable: [CardContentIdentifiable] {
         var cardElementsIdentifiable: [CardContentIdentifiable] = []
