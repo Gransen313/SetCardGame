@@ -9,9 +9,10 @@ import SwiftUI
 
 struct Deck {
     
-    // An abstract deck of playing cards, not in game in current moment
+    // An abstract deck of playing cards
     var deck = Array<CardContent>()
     
+    // All possible variants of cards parameters
     static let numberOfShapes: [Int] = [1, 2, 3]
 //    static let numberOfShapes: [NumberOfShapes] = [NumberOfShapes.one, NumberOfShapes.two, NumberOfShapes.three]
     static let shapes: [Shape] = [.diamond, .rectangle, .oval]
@@ -24,10 +25,10 @@ struct Deck {
     
     mutating func createDeck() -> Array<CardContent> {
         var deck = Array<CardContent>()
-        for number in Deck.numberOfShapes {
-            for shape in Deck.shapes {
-                for shading in Deck.shadings {
-                    for color in Deck.colors {
+        Deck.numberOfShapes.forEach { number in
+            Deck.shapes.forEach { shape in
+                Deck.shadings.forEach { shading in
+                    Deck.colors.forEach { color in
                         let card = CardContent(numberOFShapes: number, shape: shape, shading: shading, color: color)
                         deck.append(card)
                     }
@@ -37,18 +38,15 @@ struct Deck {
         return deck
     }
     
-    func cardsIsMatched() {
-        
+    func cardsIsMatched(_ first: CardContent, _ second: CardContent, _ third: CardContent) -> Bool {
+        matched(first.color, second.color, third.color) &&
+        matched(first.numberOFShapes, second.numberOFShapes, third.numberOFShapes) &&
+        matched(first.shading, second.shading, third.shading) &&
+        matched(first.shape, second.shape, third.shape)
     }
     
-    func matched<P: Equatable>(first: P, second: P, third: P) -> Bool {
-        if ((first == second) && (second == third)) || ((first != second) && (first != third) && (second != third)) {
-            print("matched")
-            return true
-        } else {
-            print("not matched")
-            return false
-        }
+    func matched<P: Equatable>(_ first: P, _ second: P, _ third: P) -> Bool {
+        ((first == second) && (second == third)) || ((first != second) && (first != third) && (second != third))
     }
     
 }

@@ -20,6 +20,12 @@ class SetGameViewModel: ObservableObject {
     var cards: Array<SetGameModel.Card> {
         model.cardsOnTheTable
     }
+    var score: Int {
+        model.score
+    }
+    var noMoreCards: Bool {
+        model.lastFaceUpCardIndex == model.deck.count
+    }
     
     //MARK: - Intent(s)
     func resetGame() {

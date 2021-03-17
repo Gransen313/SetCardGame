@@ -19,9 +19,9 @@ struct SetGameView: View {
                     viewModel.resetGame()
                 }
                 Spacer()
-                Button("Add cards") {
+                Button("Deal 3 more cards") {
                     viewModel.addCards()
-                }
+                }.disabled(viewModel.noMoreCards)
                 Spacer()
             }
             ZStack {
@@ -36,7 +36,7 @@ struct SetGameView: View {
                 }
             }
             ZStack {
-                Text("Score: ")
+                Text("Score: \(viewModel.score)")
             }
             .padding()
         }
