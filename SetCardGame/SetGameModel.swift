@@ -27,17 +27,21 @@ struct SetGameModel {
     }
     private(set) var cardsOnTheTable: Array<Card>
     private(set) var selectedCards: Array<Card> {
+        didSet {
+            if selectedCards.count == maxNumberOfSelectedCards {
+                
+            }
+        }
         willSet {
-            if selectedCards.count == maxNumberOfSelectedCards, isNecessaryCheckMatching {
+            if selectedCards.count == maxNumberOfSelectedCards, !isDeselectionInProcess {
                 print("selected cards: \(selectedCards.count)")
                 checkMatching(cards: selectedCards)
             }
         }
     }
-    private(set) var isNecessaryCheckMatching: Bool = true
-    
     private(set) var lastFaceUpCardIndex: Int
     private(set) var score: Int
+    private var isDeselectionInProcess: Bool = false
     
     init(deck: [CardContent], cardContantFactory: (Int) -> CardContent) {
         self.deck = Array<Card>()
@@ -64,7 +68,7 @@ struct SetGameModel {
     }
     
     mutating func choose(card: Card) {
-        if let choosenIndex = deck.firstIndex(matching: card){
+        if let choosenIndex = deck.firstIndex(matching: card), deck[choosenIndex].isFaceUp {
             deck[choosenIndex].isSelected ? deselectCard(card: deck[choosenIndex]) : selectCard(card: deck[choosenIndex])
         }
     }
@@ -77,35 +81,35 @@ struct SetGameModel {
     
     mutating func deselectCard(card: Card) {
         if let choosenIndex = deck.firstIndex(matching: card) {
-            if deck[choosenIndex].isFaceUp, deck[choosenIndex].isSelected {
-                deck[choosenIndex].isSelected = false
-            }
+            deck[choosenIndex].isSelected = false
         }
     }
     
     mutating func deselectCards(cards: [Card]) {
         print("deselect all is called")
+        isDeselectionInProcess = true
         cards.forEach { card in
-            if let index = deck.firstIndex(matching: card) {
-                deck[index].isSelected = false
-            }
+            choose(card: card)
         }
+        isDeselectionInProcess = false
     }
     
     mutating func successfullSet(cards: [Card]) {
         print("successfull set is called")
         score += 3
+        isDeselectionInProcess = true
         cards.forEach { card in
             if let index = deck.firstIndex(matching: card) {
-                deck[index].isSelected = false
+                deck[index].isMatched = true
                 deck[index].isFaceUp = false
+                deck[index].isSelected = false
             }
         }
+        isDeselectionInProcess = false
     }
-
+    
     mutating func checkMatching(cards: [Card]) {
         print("check matching is called")
-        isNecessaryCheckMatching = false
         if matched(cards[0].content.color, cards[1].content.color, cards[2].content.color),
            matched(cards[0].content.numberOFShapes, cards[1].content.numberOFShapes, cards[2].content.numberOFShapes),
            matched(cards[0].content.shading, cards[1].content.shading, cards[2].content.shading),
@@ -115,7 +119,6 @@ struct SetGameModel {
         } else {
             deselectCards(cards: cards)
         }
-        isNecessaryCheckMatching = true
     }
     
     //Check whether equatable parameters setted or not

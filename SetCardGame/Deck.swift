@@ -38,17 +38,6 @@ struct Deck {
         return deck
     }
     
-    func cardsIsMatched(_ first: CardContent, _ second: CardContent, _ third: CardContent) -> Bool {
-        matched(first.color, second.color, third.color) &&
-        matched(first.numberOFShapes, second.numberOFShapes, third.numberOFShapes) &&
-        matched(first.shading, second.shading, third.shading) &&
-        matched(first.shape, second.shape, third.shape)
-    }
-    
-    func matched<P: Equatable>(_ first: P, _ second: P, _ third: P) -> Bool {
-        ((first == second) && (second == third)) || ((first != second) && (first != third) && (second != third))
-    }
-    
 }
 
 struct CardContent: Equatable {
