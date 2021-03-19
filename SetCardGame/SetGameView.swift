@@ -20,7 +20,7 @@ struct SetGameView: View {
                 }
                 Spacer()
                 Button("Deal 3 more cards") {
-                    viewModel.addCards()
+                    viewModel.deal3MoreCardsPressed()
                 }.disabled(viewModel.noMoreCards)
                 Spacer()
             }
@@ -70,6 +70,7 @@ struct CardView: View {
         if card.isFaceUp && !card.isMatched {
             ZStack {
                 RoundedRectangle(cornerRadius: cornerRadius).fill(card.isSelected ? Color.gray : Color.white).opacity(opacityForSelection)
+                RoundedRectangle(cornerRadius: cornerRadius).fill(colorForSet(card: card)).opacity(opacityForSelection)
                 RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: lineWidth)
                 VStack {
                     ForEach(cardElementsIdentifiable) { element in
@@ -91,6 +92,13 @@ struct CardView: View {
     private let opacityForSelection: Double = 0.3
     private func fontSize(for size: CGSize) -> CGFloat {
         min(size.width, size.height) * fontScaleFactor
+    }
+    private func colorForSet(card: SetGameModel.Card) -> Color {
+        if let isPartOfSet = card.isPartOfSet {
+            return isPartOfSet ? .yellow : .blue
+        } else {
+            return .clear
+        }
     }
     
 }

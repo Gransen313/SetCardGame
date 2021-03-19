@@ -31,8 +31,8 @@ class SetGameViewModel: ObservableObject {
     func resetGame() {
         model = SetGameViewModel.createSetGameModel()
     }
-    func addCards() {
-        model.faceUp(numberOfCardsToAdd)
+    func deal3MoreCardsPressed() {
+        model.deal3MoreCardsPressed()
     }
     func choose(card: SetGameModel.Card) {
         model.choose(card: card)

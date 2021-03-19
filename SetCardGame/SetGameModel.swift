@@ -28,20 +28,18 @@ struct SetGameModel {
     private(set) var cardsOnTheTable: Array<Card>
     private(set) var selectedCards: Array<Card> {
         didSet {
-            if selectedCards.count == maxNumberOfSelectedCards {
-                
-            }
-        }
-        willSet {
-            if selectedCards.count == maxNumberOfSelectedCards, !isDeselectionInProcess {
-                print("selected cards: \(selectedCards.count)")
-                checkMatching(cards: selectedCards)
+            if selectedCards.count == maxNumberOfSelectedCards, !isDeckInProcess {
+                selectMatching(cards: selectedCards)
             }
         }
     }
     private(set) var lastFaceUpCardIndex: Int
     private(set) var score: Int
-    private var isDeselectionInProcess: Bool = false
+    
+    private var isDeckInProcess: Bool = false
+    private var isDeckOver: Bool {
+        lastFaceUpCardIndex == deck.count
+    }
     
     init(deck: [CardContent], cardContantFactory: (Int) -> CardContent) {
         self.deck = Array<Card>()
@@ -60,69 +58,138 @@ struct SetGameModel {
     }
     
     mutating func faceUp(_ someCards: Int) {
+        print("faceUp \(someCards) cards is called")
+        isDeckInProcess = true
         let upToIndex = min(lastFaceUpCardIndex + someCards, deck.count)
         for index in lastFaceUpCardIndex..<upToIndex {
             deck[index].isFaceUp = true
         }
         lastFaceUpCardIndex = upToIndex
+        isDeckInProcess = false
+    }
+    
+    mutating func deal3MoreCardsPressed() {
+        print("deal3MoreCards is called")
+        selectedCards.count == maxNumberOfSelectedCards && checkMatching(cards: selectedCards) ? successfullSet(cards: selectedCards) : faceUp(maxNumberOfSelectedCards)
     }
     
     mutating func choose(card: Card) {
+        print("choose \(card.id) card is called")
         if let choosenIndex = deck.firstIndex(matching: card), deck[choosenIndex].isFaceUp {
+            if selectedCards.count == maxNumberOfSelectedCards, !isDeckInProcess {
+                checkMatching(cards: selectedCards) ? successfullSet(cards: selectedCards) : deselectCards(cards: selectedCards)
+            }
             deck[choosenIndex].isSelected ? deselectCard(card: deck[choosenIndex]) : selectCard(card: deck[choosenIndex])
         }
     }
     
-    mutating func selectCard(card: Card) {
+    private mutating func selectCard(card: Card) {
+        print("selectCard \(card.id) card is called")
         if let choosenIndex = deck.firstIndex(matching: card){
             deck[choosenIndex].isSelected = true
         }
     }
     
-    mutating func deselectCard(card: Card) {
+    private mutating func deselectCard(card: Card) {
+        print("deselectCard \(card.id) card is called")
         if let choosenIndex = deck.firstIndex(matching: card) {
+            deck[choosenIndex].isPartOfSet = nil
             deck[choosenIndex].isSelected = false
         }
     }
     
-    mutating func deselectCards(cards: [Card]) {
-        print("deselect all is called")
-        isDeselectionInProcess = true
+    private mutating func deselectCards(cards: [Card]) {
+        var deselectedCards: [Int] {
+            var a: [Int] = []
+            cards.forEach { a.append($0.id) }
+            return a
+        }
+        print("deselectCards \(deselectedCards) is called")
+        isDeckInProcess = true
         cards.forEach { card in
             choose(card: card)
         }
-        isDeselectionInProcess = false
+        isDeckInProcess = false
     }
     
-    mutating func successfullSet(cards: [Card]) {
-        print("successfull set is called")
-        score += 3
-        isDeselectionInProcess = true
+    private mutating func replace(_ firstCard: Card, and secondCard: Card) {
+        print("replace \(firstCard.id) and \(secondCard.id) is called")
+        if let firstIndex = deck.firstIndex(matching: firstCard), let secondIndex = deck.firstIndex(matching: secondCard) {
+            let secondCardTemporary: Card = deck.remove(at: secondIndex)
+            let firstCardTemorary: Card = deck.remove(at: firstIndex)
+            deck.insert(secondCardTemporary, at: firstIndex)
+            deck.insert(firstCardTemorary, at: secondIndex)
+        }
+    }
+    
+    // Show when only three cards are selected and indicate whether they are
+    // matching Set or not
+    private mutating func selectMatching(cards: [Card]) {
+        var matchedCards: [Int] {
+            var a: [Int] = []
+            cards.forEach { a.append($0.id) }
+            return a
+        }
+        print("selectMatching \(matchedCards) is called")
+        isDeckInProcess = true
         cards.forEach { card in
+            if let index = deck.firstIndex(matching: card) {
+                deck[index].isPartOfSet = checkMatching(cards: cards)
+            }
+        }
+        isDeckInProcess = false
+    }
+    
+    private mutating func deselectMatching(cards: [Card]) {
+        var dismatchedCards: [Int] {
+            var a: [Int] = []
+            cards.forEach { a.append($0.id) }
+            return a
+        }
+        print("deselectMatching \(dismatchedCards) is called")
+        isDeckInProcess = true
+        cards.forEach { card in
+            if let index = deck.firstIndex(matching: card) {
+                deck[index].isPartOfSet = nil
+            }
+        }
+        isDeckInProcess = false
+    }
+    
+    private mutating func successfullSet(cards: [Card]) {
+        var settedCards: [Int] {
+            var a: [Int] = []
+            cards.forEach { a.append($0.id) }
+            return a
+        }
+        print("successfullSet \(settedCards) is called")
+        score += 3
+        isDeckInProcess = true
+        cards.forEach { card in
+            if !isDeckOver {
+                faceUp(numberOfCardsForReplace)
+                if let last = cardsOnTheTable.last {
+                    replace(card, and: last)
+                }
+            }
             if let index = deck.firstIndex(matching: card) {
                 deck[index].isMatched = true
                 deck[index].isFaceUp = false
                 deck[index].isSelected = false
             }
         }
-        isDeselectionInProcess = false
+        isDeckInProcess = false
     }
     
-    mutating func checkMatching(cards: [Card]) {
-        print("check matching is called")
-        if matched(cards[0].content.color, cards[1].content.color, cards[2].content.color),
-           matched(cards[0].content.numberOFShapes, cards[1].content.numberOFShapes, cards[2].content.numberOFShapes),
-           matched(cards[0].content.shading, cards[1].content.shading, cards[2].content.shading),
-           matched(cards[0].content.shape, cards[1].content.shape, cards[2].content.shape)
-        {
-            successfullSet(cards: cards)
-        } else {
-            deselectCards(cards: cards)
-        }
+    private mutating func checkMatching(cards: [Card]) -> Bool {
+        compare(cards[0].content.color, cards[1].content.color, cards[2].content.color) &&
+        compare(cards[0].content.numberOFShapes, cards[1].content.numberOFShapes, cards[2].content.numberOFShapes) &&
+        compare(cards[0].content.shading, cards[1].content.shading, cards[2].content.shading) &&
+        compare(cards[0].content.shape, cards[1].content.shape, cards[2].content.shape)
     }
     
     //Check whether equatable parameters setted or not
-    func matched<P: Equatable>(_ first: P, _ second: P, _ third: P) -> Bool {
+    private func compare<P: Equatable>(_ first: P, _ second: P, _ third: P) -> Bool {
         ((first == second) && (second == third)) || ((first != second) && (first != third) && (second != third))
     }
     
@@ -132,11 +199,15 @@ struct SetGameModel {
         var isSelected: Bool = false
         var isMatched: Bool = false
         var content: CardContent
+        
+        var isPartOfSet: Bool?
+        
         var id: Int
     }
     
     //MARK: - Constants
     private let numberOfCardsForStart: Int = 12
+    private let numberOfCardsForReplace: Int = 1
     private let initialLastFaceUpCardIndex: Int = 0
     private let maxNumberOfSelectedCards: Int = 3
     private let initialScore: Int = 0
