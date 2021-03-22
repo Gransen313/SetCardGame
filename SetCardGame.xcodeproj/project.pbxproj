@@ -18,6 +18,8 @@
 		9B14361525E6466600DF4664 /* Array+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B14361425E6466600DF4664 /* Array+Identifiable.swift */; };
 		9B14361925E646C400DF4664 /* Array+Only.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B14361825E646C400DF4664 /* Array+Only.swift */; };
 		9B14361C25E6579100DF4664 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B14361B25E6579100DF4664 /* Deck.swift */; };
+		9B638AAD2607B01800BCCC2E /* CGImage+Stripes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B638AAC2607B01800BCCC2E /* CGImage+Stripes.swift */; };
+		9B638AB126087F1200BCCC2E /* AnyShape+setShading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B638AB026087F1200BCCC2E /* AnyShape+setShading.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		9B14361425E6466600DF4664 /* Array+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Identifiable.swift"; sourceTree = "<group>"; };
 		9B14361825E646C400DF4664 /* Array+Only.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Only.swift"; sourceTree = "<group>"; };
 		9B14361B25E6579100DF4664 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
+		9B638AAC2607B01800BCCC2E /* CGImage+Stripes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+Stripes.swift"; sourceTree = "<group>"; };
+		9B638AB026087F1200BCCC2E /* AnyShape+setShading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyShape+setShading.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,8 +71,10 @@
 			isa = PBXGroup;
 			children = (
 				9B1435F825E6438400DF4664 /* SetCardGameApp.swift */,
+				9B638AB026087F1200BCCC2E /* AnyShape+setShading.swift */,
 				9B14361425E6466600DF4664 /* Array+Identifiable.swift */,
 				9B14361825E646C400DF4664 /* Array+Only.swift */,
+				9B638AAC2607B01800BCCC2E /* CGImage+Stripes.swift */,
 				9B1435FA25E6438400DF4664 /* SetGameView.swift */,
 				9B14360E25E6459700DF4664 /* Grid.swift */,
 				9B14361125E645AF00DF4664 /* GridLayout.swift */,
@@ -163,6 +169,8 @@
 				9B14360C25E6455600DF4664 /* SetGameModel.swift in Sources */,
 				9B14360925E6454000DF4664 /* SetGameViewModel.swift in Sources */,
 				9B14361525E6466600DF4664 /* Array+Identifiable.swift in Sources */,
+				9B638AAD2607B01800BCCC2E /* CGImage+Stripes.swift in Sources */,
+				9B638AB126087F1200BCCC2E /* AnyShape+setShading.swift in Sources */,
 				9B1435FB25E6438400DF4664 /* SetGameView.swift in Sources */,
 				9B14361225E645AF00DF4664 /* GridLayout.swift in Sources */,
 				9B14360F25E6459700DF4664 /* Grid.swift in Sources */,

@@ -52,7 +52,7 @@ struct CardView: View {
     
     var cardElementsIdentifiable: [CardContentIdentifiable] {
         var cardElementsIdentifiable: [CardContentIdentifiable] = []
-        for index in 0..<card.content.numberOFShapes {
+        for index in 0..<card.content.numberOfElements {
             let cardElementIdentifiable = CardContentIdentifiable(cardContent: card.content, id: index)
             cardElementsIdentifiable.append(cardElementIdentifiable)
         }
@@ -72,13 +72,15 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: cornerRadius).fill(card.isSelected ? Color.gray : Color.white).opacity(opacityForSelection)
                 RoundedRectangle(cornerRadius: cornerRadius).fill(colorForSet(card: card)).opacity(opacityForSelection)
                 RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: lineWidth)
-                VStack {
+                VStack(spacing: spacingDistance) {
+                    Spacer()
                     ForEach(cardElementsIdentifiable) { element in
-                        Text(element.shape.letter)
+                        card.content.figure.figure
+                            .setShading(shading: card.content.shading, color: card.content.color, lineWidth: lineWidth)
                     }
+                    Spacer()
                 }
-                .font(Font.system(size: fontSize(for: size)))
-                .opacity(card.content.shading)
+                .padding()
             }
             .foregroundColor(card.content.color)
         }
@@ -90,6 +92,9 @@ struct CardView: View {
     private let lineWidth: CGFloat = 2.0
     private let fontScaleFactor: CGFloat = 0.3
     private let opacityForSelection: Double = 0.3
+    private let spacingDistance: CGFloat = 3.0
+    private let scaleForStripes: CGFloat = 1.0
+    
     private func fontSize(for size: CGSize) -> CGFloat {
         min(size.width, size.height) * fontScaleFactor
     }
@@ -106,21 +111,22 @@ struct CardView: View {
 //MARK: - Struct for drawing one element of card content
 struct CardContentIdentifiable: Identifiable {
     
-    var shape: Shape
-    var shading: Double
+    var figure: Figure
+    var shading: Shading
     var color: Color
     
     var id: Int
     
     init(cardContent: CardContent, id: Int) {
-        shape = cardContent.shape
+        figure = cardContent.figure
         shading = cardContent.shading
         color = cardContent.color
-        
         self.id = id
     }
     
 }
+
+
 
 
 

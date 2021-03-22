@@ -13,10 +13,10 @@ struct Deck {
     var deck = Array<CardContent>()
     
     // All possible variants of cards parameters
-    static let numberOfShapes: [Int] = [1, 2, 3]
+    static let numberOfElements: [Int] = [1, 2, 3]
 //    static let numberOfShapes: [NumberOfShapes] = [NumberOfShapes.one, NumberOfShapes.two, NumberOfShapes.three]
-    static let shapes: [Shape] = [.diamond, .rectangle, .oval]
-    static let shadings: [Double] = [0.33, 0.66, 1.0]
+    static let figures: [Figure] = [.diamond, .rectangle, .oval]
+    static let shadings: [Shading] = [.solid, .striped, .open]
     static let colors: [Color] = [.green, .pink, .orange]
     
     init() {
@@ -25,11 +25,11 @@ struct Deck {
     
     mutating func createDeck() -> Array<CardContent> {
         var deck = Array<CardContent>()
-        Deck.numberOfShapes.forEach { number in
-            Deck.shapes.forEach { shape in
+        Deck.numberOfElements.forEach { number in
+            Deck.figures.forEach { figure in
                 Deck.shadings.forEach { shading in
                     Deck.colors.forEach { color in
-                        let card = CardContent(numberOFShapes: number, shape: shape, shading: shading, color: color)
+                        let card = CardContent(numberOfElements: number, figure: figure, shading: shading, color: color)
                         deck.append(card)
                     }
                 }
@@ -42,16 +42,18 @@ struct Deck {
 
 struct CardContent: Equatable {
     
-    var numberOFShapes: Int
+    var numberOfElements: Int
 //    var numberOFShapes: NumberOfShapes
-    var shape: Shape
-    var shading: Double
+    var figure: Figure
+//    var shading: Double
+    var shading: Shading
     var color: Color
     
 }
 
-enum Shape: Equatable {
+enum Figure: Equatable {
     case diamond, rectangle, oval
+    
     var letter: String {
         switch self {
         case .diamond: return "D"
@@ -59,6 +61,17 @@ enum Shape: Equatable {
         case .rectangle: return "R"
         }
     }
+    var figure: some Shape {
+        switch self {
+        case .diamond: return AnyShape(shape: Rectangle())
+        case .oval: return AnyShape(shape: RoundedRectangle(cornerRadius: 12))
+        case .rectangle: return AnyShape(shape: Ellipse())
+        }
+    }
+}
+
+enum Shading: Equatable {
+    case solid, striped, open
 }
 
 enum NumberOfShapes {

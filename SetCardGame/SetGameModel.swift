@@ -58,7 +58,6 @@ struct SetGameModel {
     }
     
     mutating func faceUp(_ someCards: Int) {
-        print("faceUp \(someCards) cards is called")
         isDeckInProcess = true
         let upToIndex = min(lastFaceUpCardIndex + someCards, deck.count)
         for index in lastFaceUpCardIndex..<upToIndex {
@@ -69,12 +68,10 @@ struct SetGameModel {
     }
     
     mutating func deal3MoreCardsPressed() {
-        print("deal3MoreCards is called")
         selectedCards.count == maxNumberOfSelectedCards && checkMatching(cards: selectedCards) ? successfullSet(cards: selectedCards) : faceUp(maxNumberOfSelectedCards)
     }
     
     mutating func choose(card: Card) {
-        print("choose \(card.id) card is called")
         if let choosenIndex = deck.firstIndex(matching: card), deck[choosenIndex].isFaceUp {
             if selectedCards.count == maxNumberOfSelectedCards, !isDeckInProcess {
                 checkMatching(cards: selectedCards) ? successfullSet(cards: selectedCards) : deselectCards(cards: selectedCards)
@@ -84,14 +81,12 @@ struct SetGameModel {
     }
     
     private mutating func selectCard(card: Card) {
-        print("selectCard \(card.id) card is called")
         if let choosenIndex = deck.firstIndex(matching: card){
             deck[choosenIndex].isSelected = true
         }
     }
     
     private mutating func deselectCard(card: Card) {
-        print("deselectCard \(card.id) card is called")
         if let choosenIndex = deck.firstIndex(matching: card) {
             deck[choosenIndex].isPartOfSet = nil
             deck[choosenIndex].isSelected = false
@@ -99,12 +94,6 @@ struct SetGameModel {
     }
     
     private mutating func deselectCards(cards: [Card]) {
-        var deselectedCards: [Int] {
-            var a: [Int] = []
-            cards.forEach { a.append($0.id) }
-            return a
-        }
-        print("deselectCards \(deselectedCards) is called")
         isDeckInProcess = true
         cards.forEach { card in
             choose(card: card)
@@ -113,7 +102,6 @@ struct SetGameModel {
     }
     
     private mutating func replace(_ firstCard: Card, and secondCard: Card) {
-        print("replace \(firstCard.id) and \(secondCard.id) is called")
         if let firstIndex = deck.firstIndex(matching: firstCard), let secondIndex = deck.firstIndex(matching: secondCard) {
             let secondCardTemporary: Card = deck.remove(at: secondIndex)
             let firstCardTemorary: Card = deck.remove(at: firstIndex)
@@ -125,12 +113,6 @@ struct SetGameModel {
     // Show when only three cards are selected and indicate whether they are
     // matching Set or not
     private mutating func selectMatching(cards: [Card]) {
-        var matchedCards: [Int] {
-            var a: [Int] = []
-            cards.forEach { a.append($0.id) }
-            return a
-        }
-        print("selectMatching \(matchedCards) is called")
         isDeckInProcess = true
         cards.forEach { card in
             if let index = deck.firstIndex(matching: card) {
@@ -141,12 +123,6 @@ struct SetGameModel {
     }
     
     private mutating func deselectMatching(cards: [Card]) {
-        var dismatchedCards: [Int] {
-            var a: [Int] = []
-            cards.forEach { a.append($0.id) }
-            return a
-        }
-        print("deselectMatching \(dismatchedCards) is called")
         isDeckInProcess = true
         cards.forEach { card in
             if let index = deck.firstIndex(matching: card) {
@@ -157,12 +133,6 @@ struct SetGameModel {
     }
     
     private mutating func successfullSet(cards: [Card]) {
-        var settedCards: [Int] {
-            var a: [Int] = []
-            cards.forEach { a.append($0.id) }
-            return a
-        }
-        print("successfullSet \(settedCards) is called")
         score += 3
         isDeckInProcess = true
         cards.forEach { card in
@@ -183,9 +153,9 @@ struct SetGameModel {
     
     private mutating func checkMatching(cards: [Card]) -> Bool {
         compare(cards[0].content.color, cards[1].content.color, cards[2].content.color) &&
-        compare(cards[0].content.numberOFShapes, cards[1].content.numberOFShapes, cards[2].content.numberOFShapes) &&
+        compare(cards[0].content.numberOfElements, cards[1].content.numberOfElements, cards[2].content.numberOfElements) &&
         compare(cards[0].content.shading, cards[1].content.shading, cards[2].content.shading) &&
-        compare(cards[0].content.shape, cards[1].content.shape, cards[2].content.shape)
+        compare(cards[0].content.figure, cards[1].content.figure, cards[2].content.figure)
     }
     
     //Check whether equatable parameters setted or not
