@@ -16,11 +16,15 @@ struct SetGameView: View {
             HStack {
                 Spacer()
                 Button("New game") {
-                    viewModel.resetGame()
+                    withAnimation(.easeInOut) {
+                        viewModel.resetGame()
+                    }
                 }
                 Spacer()
                 Button("Deal 3 more cards") {
-                    viewModel.deal3MoreCardsPressed()
+                    withAnimation(.easeInOut) {
+                        viewModel.deal3MoreCardsPressed()
+                    }
                 }.disabled(viewModel.noMoreCards)
                 Spacer()
             }
@@ -40,7 +44,7 @@ struct SetGameView: View {
             }
             .padding()
         }
-        .padding(20)
+        .padding()
     }
     
 }
@@ -69,19 +73,23 @@ struct CardView: View {
     private func body(for size: CGSize) -> some View {
         if card.isFaceUp && !card.isMatched {
             ZStack {
-                RoundedRectangle(cornerRadius: cornerRadius).fill(card.isSelected ? Color.gray : Color.white).opacity(opacityForSelection)
-                RoundedRectangle(cornerRadius: cornerRadius).fill(colorForSet(card: card)).opacity(opacityForSelection)
-                RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: lineWidth)
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(card.isSelected ? Color.gray : Color.white)
+                    .opacity(opacityForSelection)
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(colorForSet(card: card))
+                    .opacity(opacityForSelection)
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(lineWidth: lineWidth)
                 VStack(spacing: spacingDistance) {
-                    Spacer()
                     ForEach(cardElementsIdentifiable) { element in
                         card.content.figure.figure
                             .setShading(shading: card.content.shading, color: card.content.color, lineWidth: lineWidth)
+                            .frame(width: size.width * elementWidthMultiplier, height: size.height * elementHeightMultiplier, alignment: .center)
                     }
-                    Spacer()
                 }
-                .padding()
             }
+            .frame(width: size.width * cardWidthMultiplier, height: size.height * cardHeightMultiplier, alignment: .center)
             .foregroundColor(card.content.color)
         }
     }
@@ -92,8 +100,13 @@ struct CardView: View {
     private let lineWidth: CGFloat = 2.0
     private let fontScaleFactor: CGFloat = 0.3
     private let opacityForSelection: Double = 0.3
-    private let spacingDistance: CGFloat = 3.0
+    private let spacingDistance: CGFloat = 5.0
     private let scaleForStripes: CGFloat = 1.0
+    
+    private let elementWidthMultiplier: CGFloat = 0.6
+    private let elementHeightMultiplier: CGFloat = 0.2
+    private let cardWidthMultiplier: CGFloat = 1.1
+    private let cardHeightMultiplier: CGFloat = 1.1
     
     private func fontSize(for size: CGSize) -> CGFloat {
         min(size.width, size.height) * fontScaleFactor
@@ -140,3 +153,4 @@ struct ContentView_Previews: PreviewProvider {
         SetGameView(viewModel: SetGameViewModel())
     }
 }
+

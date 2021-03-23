@@ -21,7 +21,7 @@ extension Shape {
     func setShading(shading: Shading, color: Color, scale: CGFloat = 1.0, lineWidth: CGFloat) -> some View {
         var view: some View {
             switch shading {
-            case .open: return AnyView(self)
+            case .open: return AnyView(self.fill(Color.clear))
             case .striped: return AnyView(self.fill(ImagePaint(image: Image(decorative: CGImage.stripes(colors: (UIColor(color), .clear)), scale: scale))))
             case .solid: return AnyView(self.fill())
             }

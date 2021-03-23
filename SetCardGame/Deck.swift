@@ -63,9 +63,9 @@ enum Figure: Equatable {
     }
     var figure: some Shape {
         switch self {
-        case .diamond: return AnyShape(shape: Rectangle())
-        case .oval: return AnyShape(shape: RoundedRectangle(cornerRadius: 12))
-        case .rectangle: return AnyShape(shape: Ellipse())
+        case .diamond: return AnyShape(shape: Diamond())
+        case .oval: return AnyShape(shape: Oval())
+        case .rectangle: return AnyShape(shape: Squiggle())
         }
     }
 }
