@@ -103,7 +103,7 @@ struct CardView: View {
     private let spacingDistance: CGFloat = 5.0
     private let scaleForStripes: CGFloat = 1.0
     
-    private let elementWidthMultiplier: CGFloat = 0.6
+    private let elementWidthMultiplier: CGFloat = 0.5
     private let elementHeightMultiplier: CGFloat = 0.2
     private let cardWidthMultiplier: CGFloat = 1.1
     private let cardHeightMultiplier: CGFloat = 1.1
@@ -153,4 +153,5 @@ struct ContentView_Previews: PreviewProvider {
         SetGameView(viewModel: SetGameViewModel())
     }
 }
+
 
