@@ -15,6 +15,7 @@ struct AnyShape: Shape {
     public func path(in rect: CGRect) -> Path {
         base(rect)
     }
+    
 }
 
 extension Shape {
@@ -28,4 +29,5 @@ extension Shape {
         }
         return view.overlay(self.stroke(lineWidth: lineWidth))
     }
+    
 }

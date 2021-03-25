@@ -30,13 +30,11 @@ struct SetGameView: View {
             }
             ZStack {
                 Grid(viewModel.cards) { card in
-                    CardView(card: card)
-                        .padding()
-                        .onTapGesture {
-                            withAnimation(.linear) {
-                                viewModel.choose(card: card)
-                            }
+                    CardView(card: card).onTapGesture {
+                        withAnimation(.linear) {
+                            viewModel.choose(card: card)
                         }
+                    }
                 }
             }
             ZStack {
@@ -66,6 +64,7 @@ struct CardView: View {
     var body: some View {
         GeometryReader { geometry in
             body(for: geometry.size)
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
     }
     
@@ -73,40 +72,47 @@ struct CardView: View {
     private func body(for size: CGSize) -> some View {
         if card.isFaceUp && !card.isMatched {
             ZStack {
-                RoundedRectangle(cornerRadius: cornerRadius)
+                RoundedRectangle(cornerRadius: size.width * cornerRadiusMultiplier)
                     .fill(card.isSelected ? Color.gray : Color.white)
                     .opacity(opacityForSelection)
-                RoundedRectangle(cornerRadius: cornerRadius)
+                RoundedRectangle(cornerRadius: size.width * cornerRadiusMultiplier)
                     .fill(colorForSet(card: card))
                     .opacity(opacityForSelection)
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(lineWidth: lineWidth)
-                VStack(spacing: spacingDistance) {
+                RoundedRectangle(cornerRadius: size.width * cornerRadiusMultiplier)
+                    .stroke(lineWidth: max(size.height * shadingWidthMultiplier, lineWidth))
+                VStack(spacing: size.height * spacingMultiplier) {
                     ForEach(cardElementsIdentifiable) { element in
                         card.content.figure.figure
-                            .setShading(shading: card.content.shading, color: card.content.color, lineWidth: lineWidth)
-                            .frame(width: size.width * elementWidthMultiplier, height: size.height * elementHeightMultiplier, alignment: .center)
+                            .setShading(shading: card.content.shading, color: card.content.color, lineWidth: size.height * shadingWidthMultiplier)
+//                            Make width and height dependent on the
+//                            height of the container
+                            .frame(width: size.height * elementWidthMultiplier, height: size.height * elementHeightMultiplier, alignment: .center)
                     }
                 }
             }
-            .frame(width: size.width * cardWidthMultiplier, height: size.height * cardHeightMultiplier, alignment: .center)
+//            Make frame of the visible card dependent on the height
+//            of the container to keep ratio of the card and proportions
+//            between size of the card and size of the inner elements
+            .frame(width: size.height * bodyWidthMultiplier, height: size.height * bodyHeightMultiplier, alignment: .center)
             .foregroundColor(card.content.color)
         }
     }
     
     //MARK: - Drawing contstants
     
-    private let cornerRadius: CGFloat = 10.0
+    private let cornerRadiusMultiplier: CGFloat = 0.1
+    private let spacingMultiplier: CGFloat = 0.1
+    private let shadingWidthMultiplier: CGFloat = 0.015
+    
     private let lineWidth: CGFloat = 2.0
     private let fontScaleFactor: CGFloat = 0.3
     private let opacityForSelection: Double = 0.3
-    private let spacingDistance: CGFloat = 5.0
     private let scaleForStripes: CGFloat = 1.0
     
-    private let elementWidthMultiplier: CGFloat = 0.5
-    private let elementHeightMultiplier: CGFloat = 0.2
-    private let cardWidthMultiplier: CGFloat = 1.1
-    private let cardHeightMultiplier: CGFloat = 1.1
+    private let bodyWidthMultiplier: CGFloat = 0.6
+    private let bodyHeightMultiplier: CGFloat = 0.85
+    private let elementWidthMultiplier: CGFloat = 0.4
+    private let elementHeightMultiplier: CGFloat = 0.15
     
     private func fontSize(for size: CGSize) -> CGFloat {
         min(size.width, size.height) * fontScaleFactor

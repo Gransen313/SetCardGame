@@ -14,7 +14,6 @@ struct Deck {
     
     // All possible variants of cards parameters
     static let numberOfElements: [Int] = [1, 2, 3]
-//    static let numberOfShapes: [NumberOfShapes] = [NumberOfShapes.one, NumberOfShapes.two, NumberOfShapes.three]
     static let figures: [Figure] = [.diamond, .rectangle, .oval]
     static let shadings: [Shading] = [.solid, .striped, .open]
     static let colors: [Color] = [.green, .pink, .orange]
@@ -68,12 +67,11 @@ enum Figure: Equatable {
         case .rectangle: return AnyShape(shape: Squiggle())
         }
     }
+    
 }
 
 enum Shading: Equatable {
     case solid, striped, open
+    
 }
 
-enum NumberOfShapes {
-    case one, two, three
-}

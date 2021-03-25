@@ -78,9 +78,9 @@
 			children = (
 				9B1435F825E6438400DF4664 /* SetCardGameApp.swift */,
 				9B638AB026087F1200BCCC2E /* AnyShape+setShading.swift */,
+				9B638AAC2607B01800BCCC2E /* CGImage+Stripes.swift */,
 				9B14361425E6466600DF4664 /* Array+Identifiable.swift */,
 				9B14361825E646C400DF4664 /* Array+Only.swift */,
-				9B638AAC2607B01800BCCC2E /* CGImage+Stripes.swift */,
 				9BA081BF260A1DFD0007BEE4 /* Diamond.swift */,
 				9BA081C3260A28080007BEE4 /* Oval.swift */,
 				9BA081C6260A51800007BEE4 /* Squiggle.swift */,
