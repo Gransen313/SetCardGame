@@ -52,13 +52,13 @@ struct CardView: View {
     
     var card: SetGameModel.Card
     
-    var cardElementsIdentifiable: [CardContentIdentifiable] {
-        var cardElementsIdentifiable: [CardContentIdentifiable] = []
+    var cardContentIdentifiable: [CardContentIdentifiable] {
+        var cardContentIdentifiable: [CardContentIdentifiable] = []
         for index in 0..<card.content.numberOfElements {
             let cardElementIdentifiable = CardContentIdentifiable(cardContent: card.content, id: index)
-            cardElementsIdentifiable.append(cardElementIdentifiable)
+            cardContentIdentifiable.append(cardElementIdentifiable)
         }
-        return cardElementsIdentifiable
+        return cardContentIdentifiable
     }
     
     var body: some View {
@@ -81,7 +81,7 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: size.width * cornerRadiusMultiplier)
                     .stroke(lineWidth: max(size.height * shadingWidthMultiplier, lineWidth))
                 VStack(spacing: size.height * spacingMultiplier) {
-                    ForEach(cardElementsIdentifiable) { element in
+                    ForEach(cardContentIdentifiable) { element in
                         card.content.figure.figure
                             .setShading(shading: card.content.shading, color: card.content.color, lineWidth: size.height * shadingWidthMultiplier)
 //                            Make width and height dependent on the
@@ -129,20 +129,20 @@ struct CardView: View {
 
 //MARK: - Struct for drawing one element of card content
 struct CardContentIdentifiable: Identifiable {
-    
+
     var figure: Figure
     var shading: Shading
     var color: Color
-    
+
     var id: Int
-    
+
     init(cardContent: CardContent, id: Int) {
         figure = cardContent.figure
         shading = cardContent.shading
         color = cardContent.color
         self.id = id
     }
-    
+
 }
 
 

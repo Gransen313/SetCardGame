@@ -42,9 +42,7 @@ struct Deck {
 struct CardContent: Equatable {
     
     var numberOfElements: Int
-//    var numberOFShapes: NumberOfShapes
     var figure: Figure
-//    var shading: Double
     var shading: Shading
     var color: Color
     
@@ -53,13 +51,6 @@ struct CardContent: Equatable {
 enum Figure: Equatable {
     case diamond, rectangle, oval
     
-    var letter: String {
-        switch self {
-        case .diamond: return "D"
-        case .oval: return "O"
-        case .rectangle: return "R"
-        }
-    }
     var figure: some Shape {
         switch self {
         case .diamond: return AnyShape(shape: Diamond())
