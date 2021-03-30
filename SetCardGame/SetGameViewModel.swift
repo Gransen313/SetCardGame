@@ -34,6 +34,9 @@ class SetGameViewModel: ObservableObject {
     func deal3MoreCardsPressed() {
         model.deal3MoreCardsPressed()
     }
+    func deal(_ someCards: Int) {
+        model.faceUp(someCards)
+    }
     func choose(card: SetGameModel.Card) {
         model.choose(card: card)
     }

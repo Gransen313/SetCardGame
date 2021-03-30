@@ -11,18 +11,31 @@ struct SetGameView: View {
     
     @ObservedObject var viewModel: SetGameViewModel
     
+    private func deal(_ someCards: Int) {
+        let delay: Double = someCards == numberOfCardsForStart ? delayForStart : noDelay
+        withAnimation(Animation.easeOut(duration: durationConstant).delay(delay)) {
+            viewModel.deal(someCards)
+        }
+    }
+    
+    private func getOffset() -> CGSize {
+        let angle : Double = Double.random(in: 0...360)
+        return CGSize(width: 1000 * cos(angle), height: 1000 * sin(angle))
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button("New game") {
-                    withAnimation(.easeInOut) {
+                    withAnimation(.easeOut(duration: durationConstant)) {
                         viewModel.resetGame()
+                        deal(numberOfCardsForStart)
                     }
                 }
                 Spacer()
                 Button("Deal 3 more cards") {
-                    withAnimation(.easeInOut) {
+                    withAnimation(.easeInOut(duration: durationConstant)) {
                         viewModel.deal3MoreCardsPressed()
                     }
                 }.disabled(viewModel.noMoreCards)
@@ -31,10 +44,14 @@ struct SetGameView: View {
             ZStack {
                 Grid(viewModel.cards) { card in
                     CardView(card: card).onTapGesture {
-                        withAnimation(.linear) {
+                        withAnimation(.easeOut(duration: durationConstant)) {
                             viewModel.choose(card: card)
                         }
                     }
+                    .transition(AnyTransition.offset(getOffset()))
+                }
+                .onAppear {
+                    deal(numberOfCardsForStart)
                 }
             }
             ZStack {
@@ -44,6 +61,11 @@ struct SetGameView: View {
         }
         .padding()
     }
+    //MARK: - Constants
+    private let numberOfCardsForStart: Int = 12
+    private let delayForStart: Double = 1.0
+    private let noDelay: Double = 0.0
+    private let durationConstant: Double = 1.0
     
 }
 
