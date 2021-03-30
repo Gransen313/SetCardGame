@@ -95,7 +95,7 @@ struct CardView: View {
         if card.isFaceUp && !card.isMatched {
             ZStack {
                 RoundedRectangle(cornerRadius: size.width * cornerRadiusMultiplier)
-                    .fill(card.isSelected ? Color.gray : Color.white)
+                    .fill(card.isSelected ? Color.gray : Color.clear)
                     .opacity(opacityForSelection)
                 RoundedRectangle(cornerRadius: size.width * cornerRadiusMultiplier)
                     .fill(colorForSet(card: card))
@@ -141,7 +141,7 @@ struct CardView: View {
     }
     private func colorForSet(card: SetGameModel.Card) -> Color {
         if let isPartOfSet = card.isPartOfSet {
-            return isPartOfSet ? .yellow : .blue
+            return isPartOfSet ? .yellow : .red
         } else {
             return .clear
         }
